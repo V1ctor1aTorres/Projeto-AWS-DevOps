@@ -32,7 +32,7 @@ AWS CodePipeline: automatizar as integrações entre GitHub, CodeBuild e CodeDep
 
 ## Etapas do Projeto
 ### 1 - Configurar uma Aplicação Web na Nuvem
-#### Configurar um usuário IAM
+#### Configurar um usuário IAM:
 Por questões de segurança, acesse o console da AWS com seu usuário IAM. Caso ainda não tenha um, consulte a 
 [documentação oficial](https://docs.aws.amazon.com/pt_br/streams/latest/dev/setting-up.html#:~:text=Para%20criar%20um%20grupo%20de,Administrators%20e%20escolha%20Pr%C3%B3xima%20etapa.) 
 para criá-lo.
@@ -105,8 +105,7 @@ Repositório upstream público: é o local onde o Maven busca pacotes que não e
 <img src="./images/Repository.png" alt="Repository" width="400">
 
 #### Conectar o repositório CodeArtifact ao VSCode:
-No console  do CodeArtifact visualize  as instruções de conexão. <br>
-O passo 3 deve ser copiado e colado no VSCode. <br>
+No console  do CodeArtifact visualize  as instruções de conexão. O passo 3 deve ser copiado e colado no VSCode. <br>
 
 <img src="./images/conexão-artifact-vscode.png" alt="Conexão Artifact no VSCode" width="350">
 
@@ -115,7 +114,7 @@ Copie os passos 4,5 e 6 dentro desse arquivo e salve o arquivo.
 
 #### Testar a conexão entre CodeArtifact e VSCode:
 Neste teste o Maven vai buscar e baixar todas as dependências necessárias para o projeto, seja do repositório upstream ou do Maven Central Repository, e elas serão armazenadas como cópias dentro do CodeArtifact. <br>
-Compilar a aplicação `mvn -s settings.xml compile` <br>
+Utilize o comando `mvn -s settings.xml compile` para compilar a aplicação. <br>
 Conferir se as dependências estão no CodeArtifact.
 
 <img src="./images/teste-ok.png" alt="teste-ok" width="360">
