@@ -19,7 +19,8 @@ serviços da AWS voltados para DevOps. Para facilitar o aprendizado, o projeto f
 abordagem prática e estruturada, além de permitir uma melhor compreensão e aplicação dos serviços da AWS e das tecnologias utilizadas.
 
 ## Arquitetura Geral
-<img src="./images/arquitetura.png" alt="arquitetura" width="400">
+
+![](./images/arquitetura.png)
 
 ## Serviços AWS Utilizados
 AWS IAM: criar usuário, configurar políticas e roles. <br> 
