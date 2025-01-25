@@ -5,12 +5,12 @@
 - [Arquitetura Geral](#arquitetura-geral)
 - [Serviços AWS Utilizados](#serviços-aws-utilizados)
 - [Etapas do Projeto](#etapas-do-projeto)
-  - [1 Configurar uma Aplicacao Web na Nuvem](#1-configurar-uma-aplicacao-web-na-nuvem)
-  - [2 Conectar um repositorio GitHub a AWS](#2-conectar-um-repositorio-github-a-aws)
-  - [3 Proteger as dependencias com AWS CodeArtifact](#3-proteger-as-dependencias-com-aws-codeartifact)
-  - [4 Empacotar uma aplicacao com AWS CodeBuild](#4-empacotar-uma-aplicacao-com-aws-codebuild)
-  - [5 Implantar uma aplicacao com AWS CodeDeploy](#5-implantar-uma-aplicacao-com-aws-codedeploy)
-  - [6 Pipeline CI/CD com AWS CodePipeline](#6-pipeline-cicd-com-aws-codepipeline)
+  - [1 - Configurar uma Aplicacao Web na Nuvem](#1-configurar-uma-aplicacao-web-na-nuvem)
+  - [2 - Conectar um repositorio GitHub a AWS](#2-conectar-um-repositorio-github-a-aws)
+  - [3 - Proteger as dependencias com AWS CodeArtifact](#3-proteger-as-dependencias-com-aws-codeartifact)
+  - [4 - Empacotar uma aplicacao com AWS CodeBuild](#4-empacotar-uma-aplicacao-com-aws-codebuild)
+  - [5 - Implantar uma aplicacao com AWS CodeDeploy](#5-implantar-uma-aplicacao-com-aws-codedeploy)
+  - [6 - Pipeline CI/CD com AWS CodePipeline](#6-pipeline-cicd-com-aws-codepipeline)
 
 ## Sobre o Projeto
 Este projeto tem como objetivo criar um pipeline CI/CD para construir e implantar uma aplicação web simples utilizando 
