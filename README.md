@@ -183,8 +183,8 @@ Logs panel: ativar logs do CloudWatch para o CodeBuild permite monitorar o proce
 #### Criar o arquivo buildspec.yml da sua aplicação web:
 Este arquivo informa ao CodeBuild quais comandos executar durante o processo de build, como instalar dependências e compilar o código. <br>
 No VSCode crie o arquivo buildspec.yml na raiz do seu projeto.
-Salve o arquivo e faça commit e push das suas alterações, para garantir que o CodeBuild use os arquivos do repositório CodeCommit, não diretamente do VSCode.
-(Visualize o arquivo buildspec.yml [aqui](buildspec.yml))
+Salve o arquivo e faça commit e push das suas alterações, para garantir que o CodeBuild use os arquivos do repositório CodeCommit, não diretamente do VSCode. <br>
+Visualize o arquivo buildspec.yml [aqui](buildspec.yml).
 
 #### Modificando a IAM role do seu CodeBuild:
 Modificar a IAM role do CodeBuild para conceder as permissões necessárias para acessar o repositório CodeArtifact e permitir que o CodeBuild busque os pacotes requeridos, garantindo a conclusão do processo de build da aplicação. <br>
@@ -218,7 +218,7 @@ install_dependencies.sh:  instala as dependências de sistema, como Apache Tomca
 start_server.sh: inicia os serviços Tomcat e HTTPD na instância EC2, garantindo que os serviços necessários estejam ativos e funcionando. <br>
 stop_server.sh: para os serviços Tomcat e HTTPD na instância EC2, garantindo que versões antigas dos servidores sejam desativadas antes de um novo deploy. <br>
 appspec.yml: orienta o CodeDeploy sobre os passos e arquivos necessários para um deploy. <br>
-Visualize os arquivos de script [aqui](./scripts/) e o arquivo appsec.yml [aqui](appspec.yml) <br>
+Visualize os arquivos de script [aqui](./scripts/) e o arquivo appsec.yml [aqui](appspec.yml). <br>
 É necessário incluir os scripts na seção artifacts do arquivo buildspec.yml
 ```
 - appspec.yml
