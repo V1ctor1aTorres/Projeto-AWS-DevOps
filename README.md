@@ -32,22 +32,23 @@ AWS CodePipeline: automatizar as integrações entre GitHub, CodeBuild e CodeDep
 
 ## Etapas do Projeto
 ### 1 - Configurar uma Aplicação Web na Nuvem
-#### Configurar um usuário IAM
+#### Configurar um usuário IAM:
 Por questões de segurança, acesse o console da AWS com seu usuário IAM. Caso ainda não tenha um, consulte a 
 [documentação oficial](https://docs.aws.amazon.com/pt_br/streams/latest/dev/setting-up.html#:~:text=Para%20criar%20um%20grupo%20de,Administrators%20e%20escolha%20Pr%C3%B3xima%20etapa.) 
 para criá-lo.
 
-#### Lançar uma instância EC2
+#### Lançar uma instância EC2:
 Para hospedar o ambiente de desenvolvimento, é necessária a criação de uma instância EC2.
 Consulte a [documentação oficial](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/tutorial-launch-a-test-ec2-instance.html) 
 para lançar a instância, configurar um par de chaves e a rede da instância.
+![](./images/ec2.png)
 
-#### Estabelecer uma conexão SSH com a instância EC2
+#### Estabelecer uma conexão SSH com a instância EC2:
 Caso seja necessário, utilize o comando `chmod 400 arquivo.pem` para alterar as permissões do seu arquivo .pem. <br>
-Para conectar à instância, utilize: 
+Para conectar à instância, utilize  
 `ssh -i [CAMINHO PARA O SEU ARQUIVO .PEM] ec2-user@[SEU DNS PÚBLICO IPV4]`
 
-#### Instalar o Apache Maven e o Amazon Corretto 8 para gerar uma aplicação web simples
+#### Instalar o Apache Maven e o Amazon Corretto 8 para gerar uma aplicação web simples:
 Instalar Apache Maven na Instância EC2:
 ```
 wget https://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
@@ -56,14 +57,14 @@ echo "export PATH=/opt/apache-maven-3.5.2/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
 ```
 
-Instalar Amazon Corretto 8, uma versão do Java na AWS:
+Instalar Amazon Corretto 8:
 ``` 
 sudo dnf install -y java-1.8.0-amazon-corretto-devel
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto.x86_64
 export PATH=/usr/lib/jvm/java-1.8.0-amazon-corretto.x86_64/jre/bin/:$PATH
 ```
 
-#### Executar os comandos Maven no terminal para gerar uma aplicação web em Java
+#### Executar os comandos Maven no terminal para gerar uma aplicação web em Java:
 ```
 mvn archetype:generate \
    -DgroupId=com.awsdevops.app \
@@ -72,79 +73,224 @@ mvn archetype:generate \
    -DinteractiveMode=false
 ```
 
-#### Conectar o VSCode à instância EC2 usando o Remote-SSH
+#### Conectar o VSCode à instância EC2 usando o Remote-SSH:
 Instalar a extensão [Remote-SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh) 
-no VSCode para que você possa ver e editar a app web que acabou de criar.
+no VSCode para que você possa ver e editar a app web que acabou de criar. <br>
+
 ![remote-SSH2](./images/remote-SSH1.png)
 
 
 ### 2 - Conectar um repositório GitHub à AWS
-#### Instalar o Git na instância EC2
-[... conteúdo ...]
+#### Instalar o Git na instância EC2:
+```
+sudo dnf update -y
+sudo dnf install git -y 
+```
 
 #### Conectar o seu projeto de aplicação web a um repositório GitHub
-[... conteúdo ...]
+Criar um repositório no seu GitHub e fazer commit e push das alterações. <br>
+
+![](/images/repositorio-GitHub.png)
 
 ### 3 - Proteger as dependências com AWS CodeArtifact
-#### Criar seu domínio e repositório
-[... conteúdo ...]
+#### Criar seu domínio e repositório:
+Domínio: é como uma pasta principal para organizar e armazenar repositórios do seu projeto. Armazena artefatos e é acessado por uma URL. <br>
 
-#### Conectar o repositório CodeArtifact ao VSCode
-[... conteúdo ...]
+![](./images/Domain.png)
 
-#### Testar a conexão entre CodeArtifact e VSCode
-[... conteúdo ...]
+Repositório local: é onde você guarda os pacotes de software que já foram instalados no seu ambiente de desenvolvimento. <br>
+Repositório upstream público: é o local onde o Maven busca pacotes que não estão no repositório local. <br>
 
-#### Conferir o repositório no CodeArtifact
-[... conteúdo ...]
+![](./images/Repository.png)
 
-#### Configure uma política do IAM para usar o CodeArtifact
-[... conteúdo ...]
+#### Conectar o repositório CodeArtifact ao VSCode:
+No console  do CodeArtifact visualize  as instruções de conexão. <br>
+O passo 3 deve ser copiado e colado no VSCode. <br>
+
+<img src="./images/conexão-artifact-vscode.png" alt="Conexão Artifact no VSCode" width="350">
+
+Com o comando `echo $'<settings>\n</settings>' > settings.xml` crie o arquivo de configuração, que diz ao Maven onde encontrar as dependências e como se conectar aos repositórios corretos. <br>
+Copie os passos 4,5 e 6 dentro desse arquivo e salve o arquivo.
+
+#### Testar a conexão entre CodeArtifact e VSCode:
+Neste teste o Maven vai buscar e baixar todas as dependências necessárias para o projeto, seja do repositório upstream ou do Maven Central Repository, e elas serão armazenadas como cópias dentro do CodeArtifact. <br>
+Compilar a aplicação `mvn -s settings.xml compile` <br>
+Conferir se as dependências estão no CodeArtifact.
+
+<img src="./images/teste-ok.png" alt="teste-ok" width="350">
+
+#### Configure uma política do IAM para usar o CodeArtifact:
+Outros serviços deste projeto precisam ter acesso ao CodeArtifact. Esta política IAM serve para permitir que esses serviços acessem os recursos armazenados no repositório do CodeArtifact.
+(consumer-policy)
+```
+{
+ "Version": "2012-10-17",
+ "Statement": [
+     {
+         "Effect": "Allow",
+         "Action": [ "codeartifact:GetAuthorizationToken",
+                     "codeartifact:GetRepositoryEndpoint",
+                     "codeartifact:ReadFromRepository"
+                     ],
+         "Resource": "*"
+     },
+     {      
+         "Effect": "Allow",
+         "Action": "sts:GetServiceBearerToken",
+         "Resource": "*",
+         "Condition": {
+             "StringEquals": {
+                 "sts:AWSServiceName": "codeartifact.amazonaws.com"
+             }
+         }
+     }
+ ]
+}
+```
 
 ### 4 - Empacotar uma aplicação com AWS CodeBuild
-#### Criar um bucket do S3
-[... conteúdo ...]
+#### Criar um bucket do S3:
+![](./images/bucket.png)
 
-#### Criar um projeto de build no CodeBuild
-[... conteúdo ...]
+#### Criar um projeto de build no CodeBuild:
+Para a criação do projeto de build, temos algumas etapas: <br>
+Project configuration: configurações gerais do projeto de build.
 
-#### Criar o arquivo buildspec.yml da sua aplicação web
-[... conteúdo ...]
+![](./images/project-conf.png)
 
-#### Modificando a IAM role do seu CodeBuild
-[... conteúdo ...]
+Source panel: localização do código que o CodeBuild irá buscar, compilar e empacotar em um arquivo WAR. Neste caso, será o GitHub.
 
-#### Testar o projeto de build
-[... conteúdo ...]
+<img src="./images/source.png" alt="source" width="400">
+
+Environment panel: ambiente dedicado que será usado para compilar, testar e empacotar o código, mas não será o servidor final que hospedará a aplicação.
+
+<img src="./images/enviroment.png" alt="Enviroment" width="350">
+
+Buildspec panel: opção de utilizar o arquivo buildspec, que informa ao CodeBuild quais comandos executar durante o processo de build, como instalar dependências e compilar o código. Ainda não criamos esse arquivo, mas faremos isso em breve.
+
+![](./images/buildspec.png)
+
+Artifacts panel: configurar o CodeBuild para empacotar todos os artefatos (arquivos gerados pelo CodeBuild durante o processo de build do seu projeto) em um arquivo WAR e armazená-lo no bucket S3 criado.
+
+<img src="./images/artifacts.png" alt="artifacts" width="350">
+
+Logs panel: ativar logs do CloudWatch para o CodeBuild permite monitorar o processo de build, identificar problemas e entender o que funcionou ou não.
+
+<img src="./images/logs.png" alt="logs" width="400"> <br>
+
+![](./images/project-build.png)
+
+#### Criar o arquivo buildspec.yml da sua aplicação web:
+Este arquivo informa ao CodeBuild quais comandos executar durante o processo de build, como instalar dependências e compilar o código. <br>
+No VSCode crie o arquivo buildspec.yml na raiz do seu projeto.
+Salve o arquivo e faça commit e push das suas alterações, para garantir que o CodeBuild use os arquivos do repositório CodeCommit, não diretamente do VSCode.
+(O arquivo pode ser visualizado neste repositório GitHub)
+
+#### Modificando a IAM role do seu CodeBuild:
+Modificar a IAM role do CodeBuild para conceder as permissões necessárias para acessar o repositório CodeArtifact e permitir que o CodeBuild busque os pacotes requeridos, garantindo a conclusão do processo de build da aplicação. <br>
+Na role vamos anexar a política que criamos na etapa do CodeArtifact (consumer-policy).
+
+<img src="./images/alteracao-role.png" alt="alteracao-role" width="350"> <br>
+
+#### Testar o projeto de build:
+Executar o primeiro build usando o CodeBuild. <br>
+
+![](./images/teste-projeto-build.png)
+
+Após a conclusão verifique o arquivo WAR criado no bucket S3. <br>
+
+![](./images/WAR.png)
 
 ### 5 - Implante uma aplicação com AWS CodeDeploy
-#### Criar uma instância EC2 e VPC com AWS CloudFormation
-[... conteúdo ...]
+#### Criar uma instância EC2 e VPC com AWS CloudFormation:
+No início do projeto, uma instância EC2 foi configurada manualmente para o ambiente de desenvolvimento. Agora, será criada uma nova instância EC2 para o ambiente de produção e uma VPC para gerenciar o tráfego de rede e o acesso à aplicação. Todo o processo será automatizado para maior eficiência. <br>
+Faça upload de um template para criar a infraestrutura e crie a stack no CloudFormation. <br>
 
-#### Criar scripts para executar a aplicação
-[... conteúdo ...]
+<img src="./images/stack.png" alt="stack" width="500"> <br>
 
-#### Criar a IAM role do CodeDeploy
-[... conteúdo ...]
+![](./images/ec2-cloud-formation.png)
 
-#### Criar uma aplicação do CodeDeploy
-[... conteúdo ...]
+![](./images/vpc-cloud-formation.png)
 
-#### Criar um deployment group
-[... conteúdo ...]
+#### Criar scripts para executar a aplicação:
+O CodeDeploy executará esses scripts para configurar e implantar sua aplicação web na instância EC2 de destino. <br>
+(É possível visualizar os arquivos de script no repositório GitHub.) <br> 
+install_dependencies.sh:  instala as dependências de sistema, como Apache Tomcat e HTTPD, garantindo um ambiente consistente sempre que a aplicação for implantada. <br>
+start_server.sh: inicia os serviços Tomcat e HTTPD na instância EC2, garantindo que os serviços necessários estejam ativos e funcionando. <br>
+stop_server.sh: para os serviços Tomcat e HTTPD na instância EC2, garantindo que versões antigas dos servidores sejam desativadas antes de um novo deploy. <br>
+appspec.yml: orienta o CodeDeploy sobre os passos e arquivos necessários para um deploy. <br>
+É necessário incluir os scripts na seção artifacts do arquivo buildspec.yml
+```
+- appspec.yml
+- scripts/**/*
+```
 
-#### Criar seu deployment
-[... conteúdo ...]
+Faça o commit das alterações.
+
+<img src="./images/commit-code-deploy-files.png" alt="commit-code-deploy-files" width="500"> <br>
+
+Execute novamente o processo de build, para garantir que todos os novos arquivos e alterações sejam incluídos no arquivo zip.
+
+#### Criar a IAM role do CodeDeploy:
+Criar a IAM role do CodeDeploy para conceder permissão ao CodeDeploy para realizar implantações em uma instância EC2, utilizando a política gerenciada AWS AWSCodeDeployRole.
+
+![](./images/code-deploy-role.png)
+
+#### Criar uma aplicação do CodeDeploy:
+Funciona como uma pasta que contém todas as configurações necessárias para uma implantação. Um modelo para implantar uma aplicação web, para que você não precise configurar todas as configurações do zero a cada vez.
+
+<img src="./images/code-deploy-application.png" alt="code-deploy-application" width="500"> <br>
+
+#### Criar um deployment group:
+Define as instruções específicas para um cenário de implantação particular. Ele especifica quais servidores usar, como implantar e quais configurações aplicar para esse caso específico.
+
+![](./images/deployment-group.png)
+
+#### Criar seu deployment:
+![](./images/deployment.png)
+
+![](./images/web-app2.png)
 
 ### 6 - Pipeline CI/CD com AWS CodePipeline
-#### Configurar seu pipeline
-[... conteúdo ...]
+#### Configurar seu pipeline:
+O pipeline serve paraa automatizar as integrações entre o GitHub, CodeBuild e CodeDeploy. Sua configuração é dividida nas seguintes etapas:<br>
+pipeline settings: definições gerais do pipeline. <br>
 
-#### Lançar uma Alteração
-[... conteúdo ...]
+![](./images/pipeline-settings.png)
 
-#### Acionar um Rollback
-[... conteúdo ...]
+source provider: informar ao CodePipeline que o código fonte da aplicação está no GitHub. <br>
 
-#### Release Change
-[... conteúdo ...]
+![](./images/pipeline-source.png)
+
+build stage: informar ao CodePipeline que configuramos a etapa de build do pipeline no CodeBuild. <br>
+![](./images/pipeline-build.png)
+
+deploy stage:  informar ao CodePipeline que configuramos a etapa de deploy no CodeDeploy. <br>
+
+![](./images/pipeline-deploy.png)
+
+Certifique-se de que todas as três etapas do seu pipeline sejam concluídas com sucesso. <br> 
+
+![](./images/source-success.png)
+
+![](./images/build-deploy-success.png)
+
+#### Lançar uma Alteração:
+Agora que temos um pipeline CI/CD totalmente gerenciado, vamos fazer uma alteração na aplicação para testar se tudo está funcionando corretamente. <br>
+
+![](./images/commit-index.png)
+
+![](./images/alteracao.png)
+
+#### Acionar um Rollback:
+Significa retornar a uma versão anterior e funcional da sua aplicação, é útil quando o novo código já está correto, mas a implantação falhou. <br>
+Neste caso, o rollback foi realizado apenas na fase de implantação, então a aplicação no ambiente de produção voltou a um estado anterior, antes de atualizar o arquivo index.jsp. Porém, a etapa "Commit" ainda reflete as últimas alterações feitas nesse arquivo. <br> 
+Ou seja, o código fonte foi atualizado, mas a implantação foi revertida.
+
+![](./images/pipeline-history.png)
+
+#### Release Change:
+Release change vai atualizar as três etapas com a versão mais recente do código fonte, e você verá as mudanças refletidas no servidor de produção. <br>
+
+![](./images/alteracao.png)
+
