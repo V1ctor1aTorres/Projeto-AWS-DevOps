@@ -5,11 +5,11 @@
 - [Arquitetura Geral](#arquitetura-geral)
 - [Serviços AWS Utilizados](#serviços-aws-utilizados)
 - [Etapas do Projeto](#etapas-do-projeto)
-  - [Etapa 1 - Configurar uma Aplicacao Web na Nuvem](#etapa-1-configurar-uma-aplicacao-web-na-nuvem)
-  - [Etapa 2 - Conectar um repositorio GitHub a AWS](#etapa-3-conectar-um-repositorio-github-a-aws)
-  - [Etapa 3 - Proteger as dependencias com AWS CodeArtifact](etapa-3-proteger-as-dependencias-com-aws-codeartifact)
-  - [Etapa 4 - Empacotar uma aplicacao com AWS CodeBuild](#etapa-4-empacotar-uma-aplicacao-com-aws-codebuild)
-  - [Etapa 5 - Implantar uma aplicacao com AWS CodeDeploy](#etapa-5-mplantar-uma-aplicacao-com-aws-codedeploy)
+  - [Etapa 1 - Configurar uma aplicação web na nuvem](#etapa-1-configurar-uma-aplicacao-web-na-nuvem)
+  - [Etapa 2 - Conectar um repositório GitHub à AWS](#etapa-2-conectar-um-repositorio-github-a-aws)
+  - [Etapa 3 - Proteger as dependências com AWS CodeArtifact](#etapa-3-proteger-as-dependencias-com-aws-codeartifact)
+  - [Etapa 4 - Empacotar uma aplicação com AWS CodeBuild](#etapa-4-empacotar-uma-aplicacao-com-aws-codebuild)
+  - [Etapa 5 - Implantar uma aplicação com AWS CodeDeploy](#etapa-5-implantar-uma-aplicacao-com-aws-codedeploy)
   - [Etapa 6 - Pipeline CI/CD com AWS CodePipeline](#etapa-6-pipeline-cicd-com-aws-codepipeline)
 
 ## Sobre o Projeto
@@ -31,14 +31,14 @@ AWS CloudFormation: criar a instância e a VPC do ambiente de desenvolvimento. <
 AWS CodePipeline: automatizar as integrações entre GitHub, CodeBuild e CodeDeploy. <br>
 
 ## Etapas do Projeto
-### Configurar uma Aplicação Web na Nuvem
+### Configurar uma Aplicacao Web na Nuvem
 ### Etapa 1 - Configurar uma aplicação web na nuvem
 #### Configurar um usuário IAM:
 Por questões de segurança, acesse o console da AWS com seu usuário IAM. Caso ainda não tenha um, consulte a 
 [documentação oficial](https://docs.aws.amazon.com/pt_br/streams/latest/dev/setting-up.html#:~:text=Para%20criar%20um%20grupo%20de,Administrators%20e%20escolha%20Pr%C3%B3xima%20etapa.) 
 para criá-lo.
 
-#### Lançar uma instância EC2:
+#### Lançar uma instancia EC2:
 Para hospedar o ambiente de desenvolvimento, é necessária a criação de uma instância EC2.
 Consulte a [documentação oficial](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/tutorial-launch-a-test-ec2-instance.html) 
 para lançar a instância, configurar um par de chaves e a rede da instância. <br>
@@ -81,19 +81,19 @@ no VSCode para que você possa ver e editar a app web que acabou de criar. <br>
 
 ![remote-SSH2](./images/remote-SSH1.png)
 
-### Etapa 2 - Conectar um repositório GitHub à AWS
+### Etapa 2 - Conectar um repositorio GitHub a AWS
 #### Instalar o Git na instância EC2:
 ```
 sudo dnf update -y
 sudo dnf install git -y 
 ```
 
-#### Conectar o seu projeto de aplicação web a um repositório GitHub
+#### Conectar o seu projeto de aplicação web à um repositório GitHub
 Criar um repositório no seu GitHub e fazer commit e push das alterações. <br>
 
 <img src="./images/repositorio-GitHub.png" alt="repositorio-GitHub" width="400">
 
-### Etapa 3 - Proteger as dependências com AWS CodeArtifact
+### Etapa 3 - Proteger as dependencias com AWS CodeArtifact
 #### Criar seu domínio e repositório:
 Domínio: é como uma pasta principal para organizar e armazenar repositórios do seu projeto. Armazena artefatos e é acessado por uma URL. <br>
 
@@ -148,7 +148,7 @@ Outros serviços deste projeto precisam ter acesso ao CodeArtifact. Esta políti
 }
 ```
 
-### Etapa 4 - Empacotar uma aplicação com AWS CodeBuild
+### Etapa 4 - Empacotar uma aplicacao com AWS CodeBuild
 #### Criar um bucket do S3:
 ![](./images/bucket.png)
 
@@ -201,7 +201,7 @@ Após a conclusão verifique o arquivo WAR criado no bucket S3. <br>
 
 <img src="./images/WAR.png" alt="WAR" width="400"> <br>
 
-### Etapa 5 - Implantar uma aplicação com AWS CodeDeploy
+### Etapa 5 - Implantar uma aplicacao com AWS CodeDeploy
 #### Criar uma instância EC2 e VPC com AWS CloudFormation:
 No início do projeto, uma instância EC2 foi configurada manualmente para o ambiente de desenvolvimento. Agora, será criada uma nova instância EC2 para o ambiente de produção e uma VPC para gerenciar o tráfego de rede e o acesso à aplicação. Todo o processo será automatizado para maior eficiência. <br>
 Faça upload de um template para criar a infraestrutura e crie a stack no CloudFormation. <br>
@@ -252,7 +252,7 @@ Define as instruções específicas para um cenário de implantação particular
 
 <img src="./images/web-app2.png" alt="web-app2" width="400"> <br>
 
-### Etapa 6 - Pipeline CI/CD com AWS CodePipeline
+### Etapa 6 - Pipeline CICD com AWS CodePipeline
 #### Configurar seu pipeline:
 O pipeline serve paraa automatizar as integrações entre o GitHub, CodeBuild e CodeDeploy. Sua configuração é dividida nas seguintes etapas:<br>
 pipeline settings: definições gerais do pipeline. <br>
@@ -295,5 +295,3 @@ Ou seja, o código fonte foi atualizado, mas a implantação foi revertida.
 Release change vai atualizar as três etapas com a versão mais recente do código fonte, e você verá as mudanças refletidas no servidor de produção. <br>
 
 <img src="./images/alteracao.png" alt="alteracao" width="400"> <br>
-
-
