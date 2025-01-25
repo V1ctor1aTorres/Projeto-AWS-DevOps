@@ -32,7 +32,7 @@ AWS CodePipeline: automatizar as integrações entre GitHub, CodeBuild e CodeDep
 
 ## Etapas do Projeto
 ### 1 - Configurar uma Aplicação Web na Nuvem
-#### Configurar um usuário IAM:
+#### Configurar um usuário IAM
 Por questões de segurança, acesse o console da AWS com seu usuário IAM. Caso ainda não tenha um, consulte a 
 [documentação oficial](https://docs.aws.amazon.com/pt_br/streams/latest/dev/setting-up.html#:~:text=Para%20criar%20um%20grupo%20de,Administrators%20e%20escolha%20Pr%C3%B3xima%20etapa.) 
 para criá-lo.
@@ -40,7 +40,8 @@ para criá-lo.
 #### Lançar uma instância EC2:
 Para hospedar o ambiente de desenvolvimento, é necessária a criação de uma instância EC2.
 Consulte a [documentação oficial](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/tutorial-launch-a-test-ec2-instance.html) 
-para lançar a instância, configurar um par de chaves e a rede da instância.
+para lançar a instância, configurar um par de chaves e a rede da instância. <br>
+
 ![](./images/ec2.png)
 
 #### Estabelecer uma conexão SSH com a instância EC2:
@@ -90,18 +91,18 @@ sudo dnf install git -y
 #### Conectar o seu projeto de aplicação web a um repositório GitHub
 Criar um repositório no seu GitHub e fazer commit e push das alterações. <br>
 
-![](/images/repositorio-GitHub.png)
+<img src="./images/repositorio-GitHub.png" alt="repositorio-GitHub" width="400">
 
 ### 3 - Proteger as dependências com AWS CodeArtifact
 #### Criar seu domínio e repositório:
 Domínio: é como uma pasta principal para organizar e armazenar repositórios do seu projeto. Armazena artefatos e é acessado por uma URL. <br>
 
-![](./images/Domain.png)
+<img src="./images/Domain.png" alt="Domain" width="400">
 
 Repositório local: é onde você guarda os pacotes de software que já foram instalados no seu ambiente de desenvolvimento. <br>
 Repositório upstream público: é o local onde o Maven busca pacotes que não estão no repositório local. <br>
 
-![](./images/Repository.png)
+<img src="./images/Repository.png" alt="Repository" width="400">
 
 #### Conectar o repositório CodeArtifact ao VSCode:
 No console  do CodeArtifact visualize  as instruções de conexão. <br>
@@ -117,7 +118,7 @@ Neste teste o Maven vai buscar e baixar todas as dependências necessárias para
 Compilar a aplicação `mvn -s settings.xml compile` <br>
 Conferir se as dependências estão no CodeArtifact.
 
-<img src="./images/teste-ok.png" alt="teste-ok" width="350">
+<img src="./images/teste-ok.png" alt="teste-ok" width="360">
 
 #### Configure uma política do IAM para usar o CodeArtifact:
 Outros serviços deste projeto precisam ter acesso ao CodeArtifact. Esta política IAM serve para permitir que esses serviços acessem os recursos armazenados no repositório do CodeArtifact.
@@ -156,7 +157,7 @@ Outros serviços deste projeto precisam ter acesso ao CodeArtifact. Esta políti
 Para a criação do projeto de build, temos algumas etapas: <br>
 Project configuration: configurações gerais do projeto de build.
 
-![](./images/project-conf.png)
+<img src="./images/project-conf.png" alt="project-conf" width="400">
 
 Source panel: localização do código que o CodeBuild irá buscar, compilar e empacotar em um arquivo WAR. Neste caso, será o GitHub.
 
@@ -164,21 +165,21 @@ Source panel: localização do código que o CodeBuild irá buscar, compilar e e
 
 Environment panel: ambiente dedicado que será usado para compilar, testar e empacotar o código, mas não será o servidor final que hospedará a aplicação.
 
-<img src="./images/enviroment.png" alt="Enviroment" width="350">
+<img src="./images/enviroment.png" alt="Enviroment" width="400">
 
 Buildspec panel: opção de utilizar o arquivo buildspec, que informa ao CodeBuild quais comandos executar durante o processo de build, como instalar dependências e compilar o código. Ainda não criamos esse arquivo, mas faremos isso em breve.
 
-![](./images/buildspec.png)
+<img src="./images/buildspec.png" alt="buildspec" width="400">
 
 Artifacts panel: configurar o CodeBuild para empacotar todos os artefatos (arquivos gerados pelo CodeBuild durante o processo de build do seu projeto) em um arquivo WAR e armazená-lo no bucket S3 criado.
 
-<img src="./images/artifacts.png" alt="artifacts" width="350">
+<img src="./images/artifacts.png" alt="artifacts" width="400">
 
 Logs panel: ativar logs do CloudWatch para o CodeBuild permite monitorar o processo de build, identificar problemas e entender o que funcionou ou não.
 
 <img src="./images/logs.png" alt="logs" width="400"> <br>
 
-![](./images/project-build.png)
+<img src="./images/project-build.png" alt="project-build" width="400"> <br>
 
 #### Criar o arquivo buildspec.yml da sua aplicação web:
 Este arquivo informa ao CodeBuild quais comandos executar durante o processo de build, como instalar dependências e compilar o código. <br>
@@ -190,27 +191,27 @@ Salve o arquivo e faça commit e push das suas alterações, para garantir que o
 Modificar a IAM role do CodeBuild para conceder as permissões necessárias para acessar o repositório CodeArtifact e permitir que o CodeBuild busque os pacotes requeridos, garantindo a conclusão do processo de build da aplicação. <br>
 Na role vamos anexar a política que criamos na etapa do CodeArtifact (consumer-policy).
 
-<img src="./images/alteracao-role.png" alt="alteracao-role" width="350"> <br>
+<img src="./images/alteracao-role.png" alt="alteracao-role" width="400"> <br>
 
 #### Testar o projeto de build:
 Executar o primeiro build usando o CodeBuild. <br>
 
-![](./images/teste-projeto-build.png)
+<img src="./images/teste-projeto-build.png" alt="teste-projeto-build" width="400"> <br>
 
 Após a conclusão verifique o arquivo WAR criado no bucket S3. <br>
 
-![](./images/WAR.png)
+<img src="./WAR.png" alt="WAR" width="400"> <br>
 
 ### 5 - Implante uma aplicação com AWS CodeDeploy
 #### Criar uma instância EC2 e VPC com AWS CloudFormation:
 No início do projeto, uma instância EC2 foi configurada manualmente para o ambiente de desenvolvimento. Agora, será criada uma nova instância EC2 para o ambiente de produção e uma VPC para gerenciar o tráfego de rede e o acesso à aplicação. Todo o processo será automatizado para maior eficiência. <br>
 Faça upload de um template para criar a infraestrutura e crie a stack no CloudFormation. <br>
 
-<img src="./images/stack.png" alt="stack" width="500"> <br>
+<img src="./images/stack.png" alt="stack" width="400"> <br>
 
-![](./images/ec2-cloud-formation.png)
+<img src="./images/ec2-cloud-formation.png" alt="ec2-cloud-formation" width="400"> <br>
 
-![](./images/vpc-cloud-formation.png)
+<img src="./images/vpc-cloud-formation.png" alt="vpc-cloud-formation" width="400"> <br>
 
 #### Criar scripts para executar a aplicação:
 O CodeDeploy executará esses scripts para configurar e implantar sua aplicação web na instância EC2 de destino. <br>
@@ -227,60 +228,62 @@ appspec.yml: orienta o CodeDeploy sobre os passos e arquivos necessários para u
 
 Faça o commit das alterações.
 
-<img src="./images/commit-code-deploy-files.png" alt="commit-code-deploy-files" width="500"> <br>
+<img src="./images/commit-code-deploy-files.png" alt="commit-code-deploy-files" width="400"> <br>
 
 Execute novamente o processo de build, para garantir que todos os novos arquivos e alterações sejam incluídos no arquivo zip.
 
 #### Criar a IAM role do CodeDeploy:
 Criar a IAM role do CodeDeploy para conceder permissão ao CodeDeploy para realizar implantações em uma instância EC2, utilizando a política gerenciada AWS AWSCodeDeployRole.
 
-![](./images/code-deploy-role.png)
+<img src="./images/code-deploy-role.png" alt="code-deploy-role" width="400"> <br>
 
 #### Criar uma aplicação do CodeDeploy:
 Funciona como uma pasta que contém todas as configurações necessárias para uma implantação. Um modelo para implantar uma aplicação web, para que você não precise configurar todas as configurações do zero a cada vez.
 
-<img src="./images/code-deploy-application.png" alt="code-deploy-application" width="500"> <br>
+<img src="./images/code-deploy-application.png" alt="code-deploy-application" width="400"> <br>
 
 #### Criar um deployment group:
 Define as instruções específicas para um cenário de implantação particular. Ele especifica quais servidores usar, como implantar e quais configurações aplicar para esse caso específico.
 
-![](./images/deployment-group.png)
+<img src="./images/deployment-group.png" alt="deployment-group" width="400"> <br>
 
 #### Criar seu deployment:
-![](./images/deployment.png)
 
-![](./images/web-app2.png)
+<img src="./images/deployment.png" alt="deployment" width="400"> <br>
+
+<img src="./images/web-app2.png" alt="web-app2" width="400"> <br>
 
 ### 6 - Pipeline CI/CD com AWS CodePipeline
 #### Configurar seu pipeline:
 O pipeline serve paraa automatizar as integrações entre o GitHub, CodeBuild e CodeDeploy. Sua configuração é dividida nas seguintes etapas:<br>
 pipeline settings: definições gerais do pipeline. <br>
 
-![](./images/pipeline-settings.png)
+<img src="./images/pipeline-settings.png" alt="pipeline-settings" width="400"> <br>
 
 source provider: informar ao CodePipeline que o código fonte da aplicação está no GitHub. <br>
 
-![](./images/pipeline-source.png)
+<img src="./images/pipeline-source.png" alt="pipeline-source" width="400"> <br>
 
 build stage: informar ao CodePipeline que configuramos a etapa de build do pipeline no CodeBuild. <br>
-![](./images/pipeline-build.png)
+
+<img src="./images/pipeline-build.png" alt="pipeline-build" width="400"> <br>
 
 deploy stage:  informar ao CodePipeline que configuramos a etapa de deploy no CodeDeploy. <br>
 
-![](./images/pipeline-deploy.png)
+<img src="./images/pipeline-deploy.png" alt="pipeline-deploy" width="400"> <br>
 
 Certifique-se de que todas as três etapas do seu pipeline sejam concluídas com sucesso. <br> 
 
-![](./images/source-success.png)
+<img src="./images/source-success.png" alt="source-success" width="400"> <br>
 
-![](./images/build-deploy-success.png)
+<img src="./images/build-deploy-success.png" alt="build-deploy-success" width="400"> <br>
 
 #### Lançar uma Alteração:
 Agora que temos um pipeline CI/CD totalmente gerenciado, vamos fazer uma alteração na aplicação para testar se tudo está funcionando corretamente. <br>
 
-![](./images/commit-index.png)
+<img src="./images/commit-index.png" alt="commit-index" width="400"> <br>
 
-![](./images/alteracao.png)
+<img src="./images/alteracao.png" alt="alteracao" width="400"> <br>
 
 #### Acionar um Rollback:
 Significa retornar a uma versão anterior e funcional da sua aplicação, é útil quando o novo código já está correto, mas a implantação falhou. <br>
@@ -288,9 +291,12 @@ Neste caso, o rollback foi realizado apenas na fase de implantação, então a a
 Ou seja, o código fonte foi atualizado, mas a implantação foi revertida.
 
 ![](./images/pipeline-history.png)
+<img src="./images/pipeline-history.png" alt="pipeline-history" width="400"> <br>
+
 
 #### Release Change:
 Release change vai atualizar as três etapas com a versão mais recente do código fonte, e você verá as mudanças refletidas no servidor de produção. <br>
 
-![](./images/alteracao.png)
+<img src="./images/alteracao.png" alt="alteracao" width="400"> <br>
+
 
