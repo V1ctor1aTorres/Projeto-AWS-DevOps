@@ -9,7 +9,7 @@
   - [2 - Conectar um repositório GitHub à AWS](#2-conectar-um-repositório-github-à-aws)
   - [3 - Proteger as dependências com AWS CodeArtifact](#3-proteger-as-dependências-com-o-aws-codeartifact)
   - [4 - Empacotar uma aplicação com AWS CodeBuild](#4-empacotar-uma-aplicação-com-o-aws-codebuild)
-  - [5 - Implante uma aplicação com AWS CodeDeploy](#5-implante-uma-aplicação-com-o-aws-codedeploy)
+  - [5 - Implantar uma aplicação com AWS CodeDeploy](#5-implantar-uma-aplicação-com-o-aws-codedeploy)
   - [6 - Pipeline CI/CD com AWS CodePipeline](#6-pipeline-cicd-com-codepipeline)
 
 
@@ -202,7 +202,7 @@ Após a conclusão verifique o arquivo WAR criado no bucket S3. <br>
 
 <img src="./images/WAR.png" alt="WAR" width="400"> <br>
 
-### 5 - Implante uma aplicação com AWS CodeDeploy
+### 5 - Implantar uma aplicação com AWS CodeDeploy
 #### Criar uma instância EC2 e VPC com AWS CloudFormation:
 No início do projeto, uma instância EC2 foi configurada manualmente para o ambiente de desenvolvimento. Agora, será criada uma nova instância EC2 para o ambiente de produção e uma VPC para gerenciar o tráfego de rede e o acesso à aplicação. Todo o processo será automatizado para maior eficiência. <br>
 Faça upload de um template para criar a infraestrutura e crie a stack no CloudFormation. <br>
