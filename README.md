@@ -200,7 +200,7 @@ Executar o primeiro build usando o CodeBuild. <br>
 
 Após a conclusão verifique o arquivo WAR criado no bucket S3. <br>
 
-<img src="./WAR.png" alt="WAR" width="400"> <br>
+<img src="./images/WAR.png" alt="WAR" width="400"> <br>
 
 ### 5 - Implante uma aplicação com AWS CodeDeploy
 #### Criar uma instância EC2 e VPC com AWS CloudFormation:
@@ -290,9 +290,7 @@ Significa retornar a uma versão anterior e funcional da sua aplicação, é út
 Neste caso, o rollback foi realizado apenas na fase de implantação, então a aplicação no ambiente de produção voltou a um estado anterior, antes de atualizar o arquivo index.jsp. Porém, a etapa "Commit" ainda reflete as últimas alterações feitas nesse arquivo. <br> 
 Ou seja, o código fonte foi atualizado, mas a implantação foi revertida.
 
-![](./images/pipeline-history.png)
 <img src="./images/pipeline-history.png" alt="pipeline-history" width="400"> <br>
-
 
 #### Release Change:
 Release change vai atualizar as três etapas com a versão mais recente do código fonte, e você verá as mudanças refletidas no servidor de produção. <br>
