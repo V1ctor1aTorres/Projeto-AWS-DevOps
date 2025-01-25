@@ -5,12 +5,12 @@
 - [Arquitetura Geral](#arquitetura-geral)
 - [Serviços AWS Utilizados](#serviços-aws-utilizados)
 - [Etapas do Projeto](#etapas-do-projeto)
-  - [Etapa 1 - Configurar uma aplicação web na nuvem](#etapa-1-configurar-uma-aplicacao-web-na-nuvem)
-  - [Etapa 2 - Conectar um repositório GitHub à AWS](#etapa-2-conectar-um-repositorio-github-a-aws)
-  - [Etapa 3 - Proteger as dependências com AWS CodeArtifact](#etapa-3-proteger-as-dependencias-com-aws-codeartifact)
-  - [Etapa 4 - Empacotar uma aplicação com AWS CodeBuild](#etapa-4-empacotar-uma-aplicacao-com-aws-codebuild)
-  - [Etapa 5 - Implantar uma aplicação com AWS CodeDeploy](#etapa-5-implantar-uma-aplicacao-com-aws-codedeploy)
-  - [Etapa 6 - Pipeline CI/CD com AWS CodePipeline](#etapa-6-pipeline-cicd-com-aws-codepipeline)
+- [Etapa 1 - Configurar uma aplicação web na nuvem](#etapa-1-configurar-uma-aplicacao-web-na-nuvem)
+- [Etapa 2 - Conectar um repositório GitHub à AWS](#etapa-2-conectar-um-repositorio-github-a-aws)
+- [Etapa 3 - Proteger as dependências com AWS CodeArtifact](#etapa-3-proteger-as-dependencias-com-aws-codeartifact)
+- [Etapa 4 - Empacotar uma aplicação com AWS CodeBuild](#etapa-4-empacotar-uma-aplicacao-com-aws-codebuild)
+- [Etapa 5 - Implantar uma aplicação com AWS CodeDeploy](#etapa-5-implantar-uma-aplicacao-com-aws-codedeploy)
+- [Etapa 6 - Pipeline CI/CD com AWS CodePipeline](#etapa-6-pipeline-cicd-com-aws-codepipeline)
 
 ## Sobre o Projeto
 Este projeto tem como objetivo criar um pipeline CI/CD para construir e implantar uma aplicação web simples utilizando 
