@@ -5,21 +5,12 @@
 - [Arquitetura Geral](#arquitetura-geral)
 - [Serviços AWS Utilizados](#serviços-aws-utilizados)
 - [Etapas do Projeto](#etapas-do-projeto)
-<<<<<<< HEAD
   - [Configurar uma Aplicacao Web na Nuvem](#configurar-uma-aplicacao-web-na-nuvem)
   - [Conectar um repositorio GitHub a AWS](#conectar-um-repositorio-github-a-aws)
   - [Proteger as dependencias com AWS CodeArtifact](proteger-as-dependencias-com-aws-codeartifact)
   - [Empacotar uma aplicacao com AWS CodeBuild](#empacotar-uma-aplicacao-com-aws-codebuild)
   - [Implantar uma aplicacao com AWS CodeDeploy](implantar-uma-aplicacao-com-aws-codedeploy)
   - [Pipeline CI/CD com AWS CodePipeline](#pipeline-cicd-com-aws-codepipeline)
-=======
-  - [1 Configurar uma aplicação web na nuvem](#1-configurar-uma-aplicacao-web-na-nuvem)
-  - [2 Conectar um repositório GitHub à AWS](#2-conectar-um-repositorio-github-a-aws)
-  - [3 Proteger as dependências com AWS CodeArtifact](#3-proteger-as-dependencias-com-aws-codeartifact)
-  - [4 Empacotar uma aplicação com AWS CodeBuild](#4-empacotar-uma-aplicacao-com-aws-codebuild)
-  - [5 Implantar uma aplicação com AWS CodeDeploy](#5-implantar-uma-aplicacao-com-aws-codedeploy)
-  - [6 Pipeline CI/CD com AWS CodePipeline](#6-pipeline-cicd-com-aws-codepipeline)
->>>>>>> 22d1c34834b99156efdc3e637d27214729e610fa
 
 ## Sobre o Projeto
 Este projeto tem como objetivo criar um pipeline CI/CD para construir e implantar uma aplicação web simples utilizando 
@@ -40,11 +31,8 @@ AWS CloudFormation: criar a instância e a VPC do ambiente de desenvolvimento. <
 AWS CodePipeline: automatizar as integrações entre GitHub, CodeBuild e CodeDeploy. <br>
 
 ## Etapas do Projeto
-<<<<<<< HEAD
 ### Configurar uma Aplicação Web na Nuvem
-=======
 ### 1 - Configurar uma aplicação web na nuvem
->>>>>>> 22d1c34834b99156efdc3e637d27214729e610fa
 #### Configurar um usuário IAM:
 Por questões de segurança, acesse o console da AWS com seu usuário IAM. Caso ainda não tenha um, consulte a 
 [documentação oficial](https://docs.aws.amazon.com/pt_br/streams/latest/dev/setting-up.html#:~:text=Para%20criar%20um%20grupo%20de,Administrators%20e%20escolha%20Pr%C3%B3xima%20etapa.) 
@@ -92,7 +80,6 @@ Instalar a extensão [Remote-SSH](https://marketplace.visualstudio.com/items?ite
 no VSCode para que você possa ver e editar a app web que acabou de criar. <br>
 
 ![remote-SSH2](./images/remote-SSH1.png)
-
 
 ### 2 - Conectar um repositório GitHub à AWS
 #### Instalar o Git na instância EC2:
